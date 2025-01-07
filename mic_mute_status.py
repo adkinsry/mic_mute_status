@@ -124,3 +124,4 @@ def main():
 
 if __name__ == "__main__":
     main()
+    os.chmod(__file__, 0o755)

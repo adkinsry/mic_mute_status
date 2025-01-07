@@ -15,4 +15,7 @@ pip3 install --upgrade --user pip
 # Install Python packages
 pip3 install --user PyGObject
 
+# Ensure the script is executable
+chmod +x "$0"
+
 echo "All dependencies have been installed."
