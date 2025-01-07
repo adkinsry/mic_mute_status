@@ -9,6 +9,9 @@ sudo apt-get install -y python3 python3-gi python3-gi-cairo gir1.2-gtk-3.0 gir1.
 # Install pip if not already installed
 sudo apt-get install -y python3-pip
 
+# Upgrade pip to the latest version
+pip3 install --upgrade --user pip
+
 # Install Python packages
 pip3 install --user PyGObject
 

@@ -72,11 +72,15 @@ class MicOverlay(Gtk.Window):
             return True
 
     def update_mute_status(self):
-        is_muted = self.get_mute_status()
-        if is_muted:
-            self.set_icon("mic-muted.png")
-        else:
-            self.set_icon("mic-unmuted.png")
+        try:
+            is_muted = self.get_mute_status()
+            if is_muted:
+                self.set_icon("mic-muted.png")
+            else:
+                self.set_icon("mic-unmuted.png")
+        except Exception as e:
+            print(f"Error updating mute status: {e}")
+            self.set_icon("dialog-error")
 
     def set_icon(self, icon_filename):
         try:
@@ -97,19 +101,26 @@ class MicOverlay(Gtk.Window):
                 return True
             else:
                 return False
-        except subprocess.CalledProcessError:
+        except subprocess.CalledProcessError as e:
+            print(f"Error getting mute status: {e}")
             return False
 
     def listen_for_changes(self):
-        process = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, text=True)
-        for line in process.stdout:
-            if "source" in line.lower():
-                GLib.idle_add(self.update_mute_status)
+        try:
+            process = subprocess.Popen(["pactl", "subscribe"], stdout=subprocess.PIPE, text=True)
+            for line in process.stdout:
+                if "source" in line.lower():
+                    GLib.idle_add(self.update_mute_status)
+        except Exception as e:
+            print(f"Error listening for changes: {e}")
 
 def main():
-    win = MicOverlay(x=1310, y=105)
-    win.connect("destroy", Gtk.main_quit)
-    Gtk.main()
+    try:
+        win = MicOverlay(x=1310, y=105)
+        win.connect("destroy", Gtk.main_quit)
+        Gtk.main()
+    except Exception as e:
+        print(f"Error in main function: {e}")
 
 if __name__ == "__main__":
     main()
